@@ -2,6 +2,8 @@
 
 > This is my second attempt to build another tracker for COVID-19. You should go check that out my [first one](https://github.com/loouislow81/pandemic-tracker-covid19-terminal) is a 100% complete version. I am not sure whether to continue this second one.
 
+### [Go Visit](https://pandemic-dashboard-covid19.netlify.com/)
+
 <p align="center">
   <img src="assets/screenshot_01.png" width="auto" height="auto"
 </p>
