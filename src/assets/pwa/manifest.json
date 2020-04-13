@@ -1,7 +1,7 @@
 {
-  "name": "Your App Name",
-  "short_name": "YourAppName",
-  "description": "You App Description",
+  "name": "COVID19 Dashboard",
+  "short_name": "COVID19",
+  "description": "Pandemic Disease COVID-19 Dashboard",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
