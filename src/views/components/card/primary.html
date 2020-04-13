@@ -1,0 +1,25 @@
+<card-primary>
+
+  <y class="relative group m-4 p-8 xs:w-64 xs:h-32 lg:w-56 lg:h-32 flex flex-col justify-center items-center { props.bgcolor } hover:bg-charcoal-200 rounded shadow hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-110 select-none overflow-hidden">
+
+    <y class="pb-2 text-sm font-bold uppercase">
+      { props.title }
+    </y>
+
+    <y class="text-2xl">
+      { props.data }
+    </y>
+
+    <y class="absolute top-0 left-0">
+      <y class="w-4 h-32 { props.marker } group-hover:bg-gray-400 rounded-l overflow-hidden transition duration-500 ease-in-out"></y>
+    </y>
+
+    <y class="{ props.virus } absolute bottom-1 right-1">
+      <y class="w-12 h-12">
+        <icon-virus></icon-virus>
+      </y>
+    </y>
+
+  </y>
+
+</card-primary>

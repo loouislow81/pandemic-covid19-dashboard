@@ -1,0 +1,222 @@
+<app>
+
+  <y class="h-screen w-screen h-full text-gray-100 font-default bg-charcoal-300">
+    <y class="xs:p-0 lg:p-4 flex flex-wrap justify-start items-start">
+
+      <y class="px-4 pt-4">
+        <text-heading
+          text="Pandemic Disease COVID19 Global Dashboard"
+        ></text-heading>
+      </y>
+
+      <router>
+
+        <y each="{ data in countries }">
+          <y class="hidden flex flex-wrap">
+
+            <text-button
+              url="{ data.url }"
+              title="{ data.title }"
+              fontweight="{ data.fontweight }"
+            ></text-button>
+
+          </y>
+        </y>
+
+        <route path="/">
+
+          <y class="xs:-mt-6 lg:-mt-6 p-4 flex flex-wrap xs:justify-center lg:justify-start items-center">
+
+            <card-primary
+              title="Last Updated"
+              data="{ lastUpdatedDate }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="All Cases"
+              data="{ totalCases }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Deaths"
+              data="{ totalDeaths }"
+              bgcolor="bg-charcoal-100"
+              marker="bg-red-500"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Today Deaths"
+              data="{ totalTodayDeaths }"
+              bgcolor="bg-charcoal-100"
+              marker="bg-red-500"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Recovered"
+              data="{ totalRecovered }"
+              bgcolor="bg-charcoal-100"
+              marker="bg-teal-500"
+              virus="show gray"
+            ></card-primary>
+
+            <card-secondary
+              title="Active"
+              data="{ totalActive }"
+              bgcolor="bg-charcoal-100"
+              marker="bg-green-500"
+              virus="show"
+            ></card-secondary>
+
+            <card-primary
+              title="Critical"
+              data="{ totalCritical }"
+              bgcolor="bg-charcoal-100"
+              marker="bg-orange-500"
+              virus="show"
+            ></card-primary>
+
+            <card-primary
+              title="Cases Per 1M"
+              data="{ totalCasesPerOneMillion }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Deaths Per 1M"
+              data="{ totalDeathsPerOneMillion }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Tests"
+              data="{ totalTests }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Tests Per 1M"
+              data="{ totalTestsPerOneMillion }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+            <card-primary
+              title="Affected Countries"
+              data="{ totalAffectedCountries }"
+              bgcolor="bg-charcoal-100"
+              virus="hidden"
+            ></card-primary>
+
+          </y>
+
+        </route>
+
+        <route path="/#/usa">
+          USA
+        </route>
+
+        <route path="/#/spain">
+          Spain
+        </route>
+
+      </router>
+
+      <y class="xs:hidden lg:block lg:px-8">
+        <text-footer></text-footer>
+      </y>
+
+    </y>
+
+  </y>
+
+
+  <style>
+    .gray {
+      filter: grayscale(1);
+    }
+  </style>
+
+
+  <script>
+    export default {
+
+      countries: [
+        { url: '/', title: 'Dashboard', fontweight: 'font-semibold'},
+        { url: '/#/usa', title: 'USA'},
+        { url: '/#/spain', title: 'Spain'},
+        { url: '/#/uk', title: 'United Kingdom'}
+      ],
+      onMounted() {
+
+        const self = this
+        self.world = []
+        const url = 'https://corona.lmao.ninja/all'
+
+        fetch(url)
+          .then(res => {
+            res.json()
+              .then(data =>{
+                delete self.error
+
+                // map data
+
+                self.lastUpdated = data.updated
+
+                const rawDate = parseInt(self.lastUpdated)
+                const date = new Date(rawDate)
+                const mm = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)
+                const dd = date.getDate() > 9 ? date.getDate() : "0" + date.getDate()
+                const yyyy = date.getFullYear()
+                self.lastUpdatedDate = dd + ' / ' + mm + ' / ' + yyyy
+
+                self.cases = data.cases
+                self.todayCases = data.todayCases
+                self.deaths = data.deaths
+                self.todayDeaths = data.todayDeaths
+                self.recovered = data.recovered
+                self.active = data.active
+                self.critical = data.critical
+                self.casesPerOneMillion = data.casesPerOneMillion
+                self.deathsPerOneMillion = data.deathsPerOneMillion
+                self.tests = data.tests
+                self.testsPerOneMillion = data.testsPerOneMillion
+                self.affectedCountries = data.affectedCountries
+
+                const nf = new Intl.NumberFormat()
+                self.totalCases = nf.format(self.cases)
+                self.totalTodayCases = nf.format(self.todayCases)
+                self.totalDeaths = nf.format(self.deaths)
+                self.totalTodayDeaths = nf.format(self.todayDeaths)
+                self.totalRecovered = nf.format(self.recovered)
+                self.totalActive = nf.format(self.active)
+                self.totalCritical = nf.format(self.critical)
+                self.totalCasesPerOneMillion = nf.format(self.casesPerOneMillion)
+                self.totalDeathsPerOneMillion = nf.format(self.deathsPerOneMillion)
+                self.totalTests = nf.format(self.tests)
+                self.totalTestsPerOneMillion = nf.format(self.testsPerOneMillion)
+                self.totalAffectedCountries = nf.format(self.affectedCountries)
+
+                self.update()
+                console.log(data)
+              })
+              .catch(error => {
+                self.error = error
+                self.update()
+                console.log(error)
+              })
+          })
+
+      }
+    }
+  </script>
+
+</app>

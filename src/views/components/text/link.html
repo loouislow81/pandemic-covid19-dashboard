@@ -1,0 +1,45 @@
+<text-link>
+
+  <y class="flex flex-row justify-center items-center">
+    <y each="{ data in links }">
+
+      <a class="px-1 text-sm text-gray-600 underline hover:text-gray-100"
+         href="{ data.url }"
+         target="_blank"
+         title="{ data.title }"
+         rel="noopener">
+
+        { data.title }
+
+      </a>
+
+    </y>
+  </y>
+
+
+  <script>
+    export default {
+
+      links: [
+        {
+          url: 'https://github.com/loouislow81/krugurt',
+          title: 'Github'
+        },
+        {
+          url: 'https://github.com/loouislow81/krugurt/wiki/Introduction',
+          title: 'Introduction'
+        },
+        {
+          url: 'https://github.com/loouislow81/krugurt/wiki/Documentation',
+          title: 'Documentation'
+        },
+        {
+          url: 'https://github.com/loouislow81/krugurt/wiki/API',
+          title: 'API'
+        }
+      ]
+
+    }
+  </script>
+
+</text-link>

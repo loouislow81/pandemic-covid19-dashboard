@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<!--
+  Krugurt, a lightweight front-end toolkit to craft elegant
+  and beautiful functional html-based view project.
+  Github (https://github.com/loouislow81/krugurt)
+-->
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+
+    <title>
+      Pandemic Disease COVID-19 Global Dashboard
+    </title>
+
+    <meta name="description"
+          content="Put your description here.">
+
+
+    <!-- pwa -->
+    <link rel="manifest"
+          href="manifest.json">
+    <!--// pwa -->
+
+
+    <!-- prefetcher -->
+    <link rel="dns-prefetch"
+          href="//">
+    <!--// prefetcher -->
+
+
+    <!-- favicon -->
+    <meta name="msapplication-TileColor"
+          content="#ffffff">
+
+    <meta name="msapplication-TileImage"
+          content="assets/image/high/favicon/ms-icon-144x144.png">
+
+    <meta name="theme-color"
+          content="#ffffff">
+
+    <link rel="apple-touch-icon"
+          sizes="57x57"
+          href="assets/image/high/favicon/apple-icon-57x57.png">
+
+    <link rel="apple-touch-icon"
+          sizes="60x60"
+          href="assets/image/high/favicon/apple-icon-60x60.png">
+
+    <link rel="apple-touch-icon"
+          sizes="72x72"
+          href="assets/image/high/favicon/apple-icon-72x72.png">
+
+    <link rel="apple-touch-icon"
+          sizes="76x76"
+          href="assets/image/high/favicon/apple-icon-76x76.png">
+
+    <link rel="apple-touch-icon"
+          sizes="114x114"
+          href="assets/image/high/favicon/apple-icon-114x114.png">
+
+    <link rel="apple-touch-icon"
+          sizes="120x120"
+          href="assets/image/high/favicon/apple-icon-120x120.png">
+
+    <link rel="apple-touch-icon"
+          sizes="144x144"
+          href="assets/image/high/favicon/apple-icon-144x144.png">
+
+    <link rel="apple-touch-icon"
+          sizes="152x152"
+          href="assets/image/high/favicon/apple-icon-152x152.png">
+
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="assets/image/high/favicon/apple-icon-180x180.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="assets/image/high/favicon/android-icon-192x192.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="assets/image/high/favicon/favicon-32x32.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="96x96"
+          href="assets/image/high/favicon/favicon-96x96.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="assets/image/high/favicon/favicon-16x16.png">
+    <!--// favicon -->
+
+
+    <!-- !! default -->
+    <link defer href="assets/css/style.css"
+          rel="stylesheet"
+          rel="preload"
+          as="style"
+          media="all">
+    <!--// !! default -->
+
+  </head>
+
+  <body class="bg-charcoal-300 h-full">
+
+    <!-- ///////// your content start here ///////// -->
+
+    <!-- mount your component inside the body -->
+
+    <y class="relative h-screen flex justify-center items-center">
+
+      <!-- !! default -->
+      <!-- if javascript is not enabled on client side -->
+      <noscript>
+        <y class="absolute top-0 left-0 max-w-md">
+          <y class="m-4 p-10 text-md text-charcoal-100 bg-white rounded-lg shadow-lg">
+            &#9785; You need to enable
+            <strong>Javascript</strong>
+            on your web browser to view this content.
+          </y>
+        </y>
+      </noscript>
+      <!--// !! default -->
+
+      <!-- preloader -->
+      <y class="h-screen flex justify-center items-center">
+        <img class="w-24 h-24"
+             src="assets/image/high/virus.png"
+             alt="Krugurt">
+      </y>
+
+      <app></app>
+
+    </y>
+
+    <!-- ///////// your content end here ///////// -->
+
+
+    <!-- !! default -->
+    <!-- krunch: components to compile -->
+    <script async data-src="components/app.html"
+            type="krunch"></script>
+    <script async data-src="components/card/primary.html"
+            type="krunch"></script>
+    <script async data-src="components/card/secondary.html"
+            type="krunch"></script>
+    <script async data-src="components/icon/biohazard.html"
+            type="krunch"></script>
+    <script async data-src="components/icon/virus.html"
+            type="krunch"></script>
+    <script async data-src="components/text/button.html"
+            type="krunch"></script>
+    <script async data-src="components/text/heading.html"
+            type="krunch"></script>
+    <script async data-src="components/text/footer.html"
+            type="krunch"></script>
+
+
+    <!-- krunch environment: routing, mounting, utilities -->
+    <script src="assets/js/app.js"></script>
+    <!--// !! default -->
+
+  </body>
+
+</html>

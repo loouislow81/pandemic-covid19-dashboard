@@ -1,0 +1,19 @@
+<image-logo>
+
+  <img class="adaptive { props.height } { props.wdith } object-contain object-center"
+       src="assets/image/low/logo/{ props.image }"
+       data-src="assets/image/high/logo/{ props.image }"
+       alt="{ props.title }">
+
+
+  <script>
+    export default {
+      onMounted() {
+
+        krunch.adaptiveImageLoader()
+
+      }
+    }
+  </script>
+
+</image-logo>
