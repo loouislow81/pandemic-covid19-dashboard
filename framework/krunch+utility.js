@@ -10,7 +10,7 @@ function krunch() {}
 */
 const log = function(msg, req) {
   console.log("krugurt:", msg, req);
-  // console.log();
+  //console.log();
 };
 
 
@@ -237,6 +237,33 @@ const isWebP = (function() {
 
 
 /*
+  Sanitizer broken images masked with transparent dummy image
+  @param {DOMimages}
+*/
+krunch.sanitizeBrokenImage = function (DOMimages) {
+  if (!DOMimages || !DOMimages.nodeName || DOMimages.nodeName != "IMG") {
+    // get all images from DOM
+    const getImg = document.getElementsByTagName("IMG");
+    let i = getImg.length;
+    if (i) {
+      while (i--) {
+        krunch.sanitizeBrokenImage(getImg[i]);
+      }
+    }
+    return;
+  }
+  // masking
+  const dummyImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWP4//8/AwAI/AL+hc2rNAAAAABJRU5ErkJggg==';
+  const replaceImg = new Image();
+  replaceImg.onerror = function () {
+    DOMimages.src = dummyImage;
+    log("(image) broken image masked with dummy", "");
+  };
+  replaceImg.src = DOMimages.src;
+};
+
+
+/*
   Image replacer for `krunch.adaptiveImageLoader()` and
   `krunch.adaptiveWebpLoader()`
   @param {className}
@@ -260,6 +287,23 @@ function imageReplacer(className) {
 
 
 /*
+  Unsupported User Agents for,
+  `krunch.adaptiveImageLoader()`,
+  `krunch.adaptiveWebpLoader()`,
+  `krunch.networkSpeed()`
+*/
+let isFirefox = typeof InstallTrigger !== 'undefined';
+
+let isSafari = /constructor/i.test(window.HTMLElement) ||
+    (function(p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] ||
+    (typeof safari !== 'undefined' && safari.pushNotification));
+
+let isIE = /*@cc_on!@*/ false || !!document.documentMode;
+
+let isEdge = !isIE && !!window.StyleMedia;
+
+
+/*
   Adaptive Image Loader
   @param {null}
   @usage,
@@ -276,26 +320,33 @@ function imageReplacer(className) {
     DSL (2 MB/s 5ms RTT)
     WiFi (30 MB/s 2ms RTT)
 */
-const networkType = navigator.connection.effectiveType;
-const downLink = navigator.connection.downlink;
-const roundTripTime = navigator.connection.rtt;
-
-let maxMBps = 1;
-let maxRtt = 600;
-
 krunch.adaptiveImageLoader = function() {
   const triggerClassName = "adaptive";
 
-  if (downLink < maxMBps || roundTripTime > maxRtt) {
-    log("(CONN) slow, low-res image", "");
-    // no nothing, use default src=""
+  if (isFirefox === true ||
+      isSafari == true ||
+      isIE === true ||
+      isEdge === true) {
+    log("(ERR) adaptiveImageLoader is unsupported for this web browser", "")
   }
   else {
-    log("(CONN) fast, hi-res image", "");
-    imageReplacer(triggerClassName);
+
+    const downLink = navigator.connection.downlink;
+    const roundTripTime = navigator.connection.rtt;
+
+    let maxMBps = 1;
+    let maxRtt = 600;
+
+    if (downLink < maxMBps || roundTripTime > maxRtt) {
+      log("(CONN) slow, low-res image", "");
+      // no nothing, use default src=""
+    }
+    else {
+      log("(CONN) fast, hi-res image", "");
+      imageReplacer(triggerClassName);
+    }
   }
 };
-
 
 /*
   Adaptive Image Loader for WebP
@@ -312,37 +363,51 @@ krunch.adaptiveImageLoader = function() {
 krunch.adaptiveWebpLoader = function() {
   const triggerClassName = "adaptiveWebp";
 
-  if (downLink < maxMBps || roundTripTime > maxRtt) {
-    log("(CONN) slow, low-res image", "");
-
-    isWebP.then(supported => {
-      if (supported) {
-        log("(BROWSER) has-WebP", "");
-        imageReplacer(triggerClassName);
-      }
-      else {
-        log("(BROWSER) no-WebP", "");
-        // no nothing, use default src=""
-      }
-    });
-
+  if (isFirefox === true ||
+      isSafari == true ||
+      isIE === true ||
+      isEdge === true) {
+    log("(ERR) adaptiveImageLoader is unsupported for this web browser", "")
   }
   else {
-    log("(CONN) fast, hi-res image", "");
 
-    isWebP.then(supported => {
-      if (supported) {
-        log("(BROWSER) has-WebP", "");
-        imageReplacer(triggerClassName);
-      }
-      else {
-        log("(BROWSER) no-WebP", "");
-        // no nothing, use default src=""
-      }
-    });
+    const downLink = navigator.connection.downlink;
+    const roundTripTime = navigator.connection.rtt;
 
+    let maxMBps = 1;
+    let maxRtt = 600;
+
+    if (downLink < maxMBps || roundTripTime > maxRtt) {
+      log("(CONN) slow, low-res image", "");
+
+      isWebP.then(supported => {
+        if (supported) {
+          log("(BROWSER) has-WebP", "");
+          imageReplacer(triggerClassName);
+        }
+        else {
+          log("(BROWSER) no-WebP", "");
+          // no nothing, use default src=""
+        }
+      });
+    }
+    else {
+      log("(CONN) fast, hi-res image", "");
+
+      isWebP.then(supported => {
+        if (supported) {
+          log("(BROWSER) has-WebP", "");
+          imageReplacer(triggerClassName);
+        }
+        else {
+          log("(BROWSER) no-WebP", "");
+          // no nothing, use default src=""
+        }
+      });
+    }
   }
 };
+
 
 
 /*
@@ -350,20 +415,30 @@ krunch.adaptiveWebpLoader = function() {
   @param {null}
  */
 krunch.networkSpeed = function() {
-  // network type that browser uses
-  log("(Network Type) " + navigator.connection.type);
-  // effective bandwidth estimate
-  log("(Downlink) " + navigator.connection.downlink + " MBytes/s", "");
-  // effective round-trip time estimate
-  log("(Round-Trip Time) " + navigator.connection.rtt + " miliseconds", "");
-  // upper bound on the downlink speed of the first network hop
-  log("(Downlink Max) " + navigator.connection.downlinkMax + " MBytes/s", "");
-  // effective connection type determined using a combination of recently
-  // observed rtt and downlink values.
-  log("(Effective Type) " + navigator.connection.effectiveType, "");
-  // true if the user has requested a reduced data usage mode from the
-  // user agent.
-  log("(DataSaver Mode) " + navigator.connection.saveData, "");
+
+  if (isFirefox === true ||
+      isSafari == true ||
+      isIE === true ||
+      isEdge === true) {
+    log("(ERR) networkSpeed is unsupported for this web browser", "")
+  }
+  else {
+
+    // network type that browser uses
+    log("(Network Type) " + navigator.connection.type);
+    // effective bandwidth estimate
+    log("(Downlink) " + navigator.connection.downlink + " MBytes/s", "");
+    // effective round-trip time estimate
+    log("(Round-Trip Time) " + navigator.connection.rtt + " miliseconds", "");
+    // upper bound on the downlink speed of the first network hop
+    log("(Downlink Max) " + navigator.connection.downlinkMax + " MBytes/s", "");
+    // effective connection type determined using a combination of recently
+    // observed rtt and downlink values.
+    log("(Effective Type) " + navigator.connection.effectiveType, "");
+    // true if the user has requested a reduced data usage mode from the
+    // user agent.
+    log("(DataSaver Mode) " + navigator.connection.saveData, "");
+  }
 };
 
 
@@ -397,6 +472,55 @@ krunch.torrent = function(id, uri) {
 
 
 /*
+  Request user to install PWA app
+  @param {null}
+  @usage,
+          <y class="hidden"
+             id="requestAppInstall">
+            <y id="requestAppTrigger">
+              ...
+            </y>
+          </y>
+*/
+krunch.requestAppInstall = function() {
+  const appInstallContainer = document.getElementById("requestAppInstall");
+  const appTrigger = document.getElementById("requestAppTrigger");
+
+  self.addEventListener("beforeinstallprompt", function(event) {
+    log("(PWA)", event);
+    // stash the event so it can be triggered later
+    window.deferredPrompt = event;
+    // remove the 'hidden' class from the element
+    appInstallContainer.classList.toggle("hidden", false);
+  });
+
+  appTrigger.addEventListener("click", function() {
+    log("(PWA) app installed", "");
+    const promptEvent = window.deferredPrompt;
+    if (!promptEvent) {
+      // the deferred prompt isn't available
+      return;
+    }
+    // show the install prompt
+    promptEvent.prompt();
+    // log the result
+    promptEvent.userChoice.then(function(result) {
+      log("(PWA)", result);
+      // reset the deferred prompt variable, since
+      // prompt() can only be called once
+      window.deferredPrompt = null;
+      // hide the install button
+      appInstallContainer.classList.toggle("hidden", true);
+    });
+  });
+
+  self.addEventListener("appinstalled", function(event) {
+    log("(PWA) app installed", event);
+  });
+};
+
+
+/*
   (!! experiemental !!)
   Train with Sigmoid Neural Network
   @param {inputArray}
@@ -418,3 +542,4 @@ krunch.torrent = function(id, uri) {
 // krunch.predictNN = function (inputArray) {
 //   const predict = nn.predict(inputArray);
 // };
+
